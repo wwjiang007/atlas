@@ -239,7 +239,8 @@ public class DelegateClassLoader extends ClassLoader {
                  (className.toLowerCase().endsWith("service")||className.toLowerCase().endsWith("receiver")) &&
                  !className.equals("com.google.firebase.iid.FirebaseInstanceIdInternalReceiver") &&
                  !className.equals("org.android.agoo.gcm.AgooFirebaseInstanceIDService") &&
-                 !className.equals("com.google.firebase.iid.FirebaseInstanceIdReceiver")){
+                 !className.equals("com.google.firebase.iid.FirebaseInstanceIdReceiver")&&
+                 !className.equals("mtopsdk.xstate.XStateServicestart")){
              Log.e("DelegateClassLoader",className + "start! so kill process!");
             Process.killProcess(Process.myPid());
         }
