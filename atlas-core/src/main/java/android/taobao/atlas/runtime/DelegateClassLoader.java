@@ -256,6 +256,18 @@ public class DelegateClassLoader extends ClassLoader {
         }catch(Throwable e){
 
         }finally {
+
+            SharedPreferences settings = RuntimeVariables.androidApplication.getSharedPreferences("com.taobao.tao.welcome.Welcome", Activity.MODE_PRIVATE);
+            boolean shouldCreateTrafficPrompt = settings.getBoolean("shouldCreateTrafficPrompt", true);
+
+            if (shouldCreateTrafficPrompt){
+                ComponentName comp = new ComponentName(RuntimeVariables.androidApplication.getPackageName(),className);
+                if (isProvider(comp)){
+                    return Atlas.class.getClassLoader().loadClass("android.taobao.atlas.util.FakeProvider");
+                }else if(isReceiver(comp)){
+                    return Atlas.class.getClassLoader().loadClass("android.taobao.atlas.util.FakeReceiver");
+                }
+            }
             if (clazz == null) {
                 if (Thread.currentThread().getId() != Looper.getMainLooper().getThread().getId()) {
                     BundleUtil.checkBundleStateSyncOnChildThread(className);
@@ -266,12 +278,7 @@ public class DelegateClassLoader extends ClassLoader {
                 if (clazz != null)
                     return clazz;
 
-                ComponentName comp = new ComponentName(RuntimeVariables.androidApplication.getPackageName(),className);
-                if (isProvider(comp)){
-                    return Atlas.class.getClassLoader().loadClass("android.taobao.atlas.util.FakeProvider");
-                }else if(isReceiver(comp)){
-                    return Atlas.class.getClassLoader().loadClass("android.taobao.atlas.util.FakeReceiver");
-                }
+
 
                 throw new ClassNotFoundException("Can't find class " + className + printExceptionInfo());
             }else{
