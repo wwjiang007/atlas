@@ -257,7 +257,7 @@ public class BridgeApplicationDelegate {
         mCurrentProcessname = processname;
         mInstalledVersionName = installedVersion;
         mIsUpdated = isUpdated;
-        PackageManagerDelegate.delegatepackageManager(rawApplication.getBaseContext());
+//        PackageManagerDelegate.delegatepackageManager(rawApplication.getBaseContext());
     }
 
     public void attachBaseContext(){

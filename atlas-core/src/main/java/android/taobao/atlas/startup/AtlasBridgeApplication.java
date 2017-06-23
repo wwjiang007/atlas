@@ -228,6 +228,8 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
 import dalvik.system.PathClassLoader;
 
@@ -250,9 +252,13 @@ public class AtlasBridgeApplication extends Application{
     public  String mCurrentProcessName;
     public  String mInstalledVersionName;
     public  Object mBridgeApplicationDelegate;
+    public Set<String>runningProcess = new HashSet<>();
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        if (!getProcessName(base).equals(base.getPackageName())&&runningProcess.size() == 1){
+                Process.killProcess(Process.myPid());
+        }
         if (!isApplicationNormalCreate(base)) {
             android.os.Process.killProcess(android.os.Process.myPid());
         }
@@ -434,6 +440,9 @@ public class AtlasBridgeApplication extends Application{
                 for (ActivityManager.RunningAppProcessInfo appProcess : mActivityManager.getRunningAppProcesses()) {
                     if (appProcess.pid == pid) {
                         mCurrentProcessName =  appProcess.processName;
+                    }
+                    if (appProcess.processName.contains(context.getPackageName())){
+                        runningProcess.add(appProcess.processName);
                     }
                 }
             } catch (Exception e) {
