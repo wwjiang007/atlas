@@ -216,7 +216,6 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.taobao.atlas.framework.Atlas;
 import android.taobao.atlas.hack.AndroidHack;
 import android.taobao.atlas.hack.AtlasHacks;
 import android.taobao.atlas.util.ApkUtils;
@@ -224,16 +223,19 @@ import android.taobao.atlas.util.log.impl.AtlasMonitor;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 
 /**
  * Created by guanjie on 15/12/9.
@@ -395,21 +397,24 @@ public class DelegateResources extends Resources {
 
 
     private static void updateResources(Resources res, String assetPath, int assertType) throws Exception {
-//        if (sAssetManagerProcessor == null) {
-//            sAssetManagerProcessor = new AssetManagerProcessor();
-//        }
-//        AssetManager updatedAssetManager = sAssetManagerProcessor.updateAssetManager(res.getAssets(), assetPath, assertType);
-//
-//        if (sResourcesProcessor == null) {
-//            sResourcesProcessor = getResourceProcessor();
-//        }
-//        sResourcesProcessor.updateResources(updatedAssetManager);
-//
-//        if (sResourcesFetcher == null) {
-//            sResourcesFetcher = new ResourceIdFetcher();
-//        }
-//        sResourcesFetcher.addAssetForGetIdentifier(assetPath);
-        addPath(res.getAssets(), assetPath);
+        if (sAssetManagerProcessor == null) {
+            sAssetManagerProcessor = new AssetManagerProcessor();
+        }
+        AssetManager updatedAssetManager = sAssetManagerProcessor.updateAssetManager(res.getAssets(), assetPath, assertType);
+        if (assertType == BUNDLE_RES) return;
+
+        if (sResourcesProcessor == null) {
+            sResourcesProcessor = getResourceProcessor();
+        }
+        sResourcesProcessor.updateResources(updatedAssetManager);
+
+        if (sResourcesFetcher == null) {
+            sResourcesFetcher = new ResourceIdFetcher();
+        }
+        sResourcesFetcher.addAssetForGetIdentifier(assetPath);
+
+
+        // addPath(res.getAssets(), assetPath);
     }
 
 
@@ -458,7 +463,7 @@ public class DelegateResources extends Resources {
             int num = (int) AtlasHacks.AssetManager_getStringBlockCount.invoke(assetManager);
 
             //4. init newStringBlockList
-            Object newStringBlockList = Array.newInstance(AtlasHacks.StringBlock.getClass(), num);
+            Object newStringBlockList = Array.newInstance(AtlasHacks.StringBlock.getmClass(), num);
             for (int i = 0; i < num; i++) {
                 if (i < seedNum) {
                     Array.set(newStringBlockList, i, mStringBlocks[i]);
@@ -544,21 +549,41 @@ public class DelegateResources extends Resources {
 
             AssetManager targetManager = null;
             if (assetType == BUNDLE_RES) {
-                targetManager = createNewAssetManager(manager, newAssetPath, true, assetType);
+                // targetManager = createNewAssetManager(manager, newAssetPath, true, assetType);
+                addPath(manager, newAssetPath);
                 updateAssetPathList(newAssetPath, true);
+                targetManager = manager;
             } else {
                 File newAssetsDir = new File(new File(newAssetPath).getParent(), "newAssets");
                 if (newAssetsDir.exists() && new File(newAssetsDir, "assets").exists()) {
                     sAssetsPatchDir = newAssetsDir.getAbsolutePath();
                 }
 
-                if (supportExpandAssetManager() && findResByAssetIndexDescending()) {
-                    targetManager = updateAssetManagerWithAppend(manager, newAssetPath, assetType);
-                    updateAssetPathList(newAssetPath, true);
-                } else {
-                    boolean findResByAssetIndexDescending = findResByAssetIndexDescending();
-                    targetManager = createNewAssetManager(manager, newAssetPath, findResByAssetIndexDescending, assetType);
-                    updateAssetPathList(newAssetPath, findResByAssetIndexDescending);
+//                if (supportExpandAssetManager() && findResByAssetIndexDescending()) {
+//                    targetManager = updateAssetManagerWithAppend(manager, newAssetPath, assetType);
+//                    updateAssetPathList(newAssetPath, true);
+//                } else {
+//                    boolean findResByAssetIndexDescending = findResByAssetIndexDescending();
+//                    targetManager = createNewAssetManager(manager, newAssetPath, findResByAssetIndexDescending, assetType);
+//                    updateAssetPathList(newAssetPath, findResByAssetIndexDescending);
+//                }
+
+                if(supportExpandAssetManager()){
+                    if(findResByAssetIndexDescending()){
+                        targetManager = updateAssetManagerWithAppend(manager,newAssetPath,assetType);
+                        updateAssetPathList(newAssetPath,true);
+                    }else{
+                        targetManager = createNewAssetManager(manager,newAssetPath,false,assetType);
+                        updateAssetPathList(newAssetPath,false);
+                    }
+                }else{
+                    if(findResByAssetIndexDescending()){
+                        targetManager = createNewAssetManager(manager,newAssetPath,true,assetType);
+                        updateAssetPathList(newAssetPath,true);
+                    }else{
+                        targetManager = createNewAssetManager(manager,newAssetPath,false,assetType);
+                        updateAssetPathList(newAssetPath,false);
+                    }
                 }
 
             }

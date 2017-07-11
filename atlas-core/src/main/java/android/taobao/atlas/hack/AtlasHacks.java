@@ -302,7 +302,7 @@ public class AtlasHacks extends HackDeclaration implements AssertionFailureHandl
     public static HackedField<Object,Object>  ActivityThread_mBoundApplication;
     public static HackedField<Object,Object>  ContextImpl_mPackageInfo;
     public static HackedField<Object,Object>                                  ActivityManager_IActivityManagerSingleton;
-    public static HackedField<Object,Object>                    AssetManager_mStringBlocks;
+    public static HackedField<android.content.res.AssetManager,Object>                    AssetManager_mStringBlocks;
 
     // Methods
     public static HackedMethod                                  ActivityThread_currentActivityThread;
@@ -456,7 +456,7 @@ public class AtlasHacks extends HackDeclaration implements AssertionFailureHandl
         ActivityThread$AppBindData_providers = ActivityThread$AppBindData.field("providers").ofGenericType(List.class);
         ActivityThread_mBoundApplication = ActivityThread.field("mBoundApplication");
         ContextImpl_mPackageInfo = ContextImpl.field("mPackageInfo");
-        AssetManager_mStringBlocks = ActivityManager.field("mStringBlocks");
+        AssetManager_mStringBlocks = AssetManager.field("mStringBlocks");
 
     }
 
@@ -516,7 +516,7 @@ public class AtlasHacks extends HackDeclaration implements AssertionFailureHandl
         }else{
             PackageParser_constructor = PackageParser.constructor();
         }
-        StringBlock_constructor = StringBlock.constructor(byte[].class,boolean.class);
+        StringBlock_constructor = StringBlock.constructor(long.class,boolean.class);
     }
 
     @Override
