@@ -208,7 +208,9 @@
 
 package android.taobao.atlas.framework;
 
+import android.app.Activity;
 import android.app.PreVerifier;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.os.Environment;
@@ -420,7 +422,13 @@ public final class Framework {
             BaselineInfoManager.instance().checkUpdateBundles(STORAGE_LOCATION);
         }
 
-//        notifyFrameworkListeners(0 /* STARTING */, systemBundle, null);
+        SharedPreferences settings = RuntimeVariables.androidApplication.getSharedPreferences("com.taobao.tao.welcome.Welcome", Activity.MODE_PRIVATE);
+        boolean shouldCreateTrafficPrompt = settings.getBoolean("shouldCreateTrafficPrompt", true);
+        if (!shouldCreateTrafficPrompt) {
+            notifyFrameworkListeners(0 /* STARTING */, systemBundle, null);
+                   systemBundle.state = Bundle.ACTIVE;
+
+        }
         // save the metadata
         if (init) {
             try {
@@ -432,9 +440,10 @@ public final class Framework {
 
         final long timediff = System.currentTimeMillis() - time;
 
-//        systemBundle.state = Bundle.ACTIVE;
         try {
-//            notifyFrameworkListeners(FrameworkEvent.STARTED, systemBundle, null);
+            if (!shouldCreateTrafficPrompt) {
+                notifyFrameworkListeners(FrameworkEvent.STARTED, systemBundle, null);
+            }
         } catch (Exception e) {
             throw new RuntimeException("notifyFrameworkListeners failed", e);
         }
