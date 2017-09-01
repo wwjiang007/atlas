@@ -210,10 +210,7 @@ package android.taobao.atlas.runtime;
 
 import android.app.Activity;
 import android.content.ContextWrapper;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Build;
-import android.taobao.atlas.util.StringUtils;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
@@ -278,7 +275,7 @@ public class ActivityTaskMgr {
         }catch (Throwable e){
 
         }finally {
-            activityList = null;
+//            activityList = null;
         }
     }
 
