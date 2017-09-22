@@ -209,24 +209,8 @@
 
 package com.taobao.android.builder.tools.manifest;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpressionException;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-
 import com.android.xml.AndroidXPathFactory;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
@@ -238,20 +222,18 @@ import com.taobao.android.builder.tools.xml.XmlHelper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.dom4j.Attribute;
-import org.dom4j.Comment;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.Node;
-import org.dom4j.Visitor;
-import org.dom4j.VisitorSupport;
+import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpressionException;
+import java.io.*;
+import java.util.*;
 
 /**
  * @author shenghua.nish
@@ -312,6 +294,7 @@ public class ManifestFileUtils {
         removeCustomLaunches(document, manifestOptions);
         updatePermission(document, manifestOptions);
         removeComments(document);
+        removeReceiver(document);
 
         XmlHelper.saveDocument(document, mainManifest);
 
@@ -972,6 +955,29 @@ public class ManifestFileUtils {
             String name = element.attributeValue("name");
             logger.info("[Remove Provider]" + name);
             element.getParent().remove(element);
+        }
+    }
+
+
+    private static void removeReceiver(Document document){
+        Element root = document.getRootElement();// 得到根节点
+        List<? extends Node> nodes = root.selectNodes("//service");
+        for (Node node : nodes) {
+            Element element = (Element)node;
+            String name = element.attributeValue("name");
+            if (name!= null&&name.equals("com.tmall.health.service.KeepService")) {
+                logger.info("[Remove service]" + name);
+                element.getParent().remove(element);
+            }
+        }
+        List<? extends Node> nodes1 = root.selectNodes("//receiver");
+        for (Node node : nodes1) {
+            Element element = (Element)node;
+            String name = element.attributeValue("name");
+            if (name!= null && (name.equals("com.taobao.accs.EventReceiver")||name.equals("com.taobao.nbcache.CacheRebootReceiver"))) {
+                logger.info("[Remove receiver]" + name);
+                element.getParent().remove(element);
+            }
         }
     }
 

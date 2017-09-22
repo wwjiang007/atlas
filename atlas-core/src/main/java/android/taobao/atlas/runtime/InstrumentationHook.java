@@ -356,16 +356,10 @@ public class InstrumentationHook extends Instrumentation {
 	}
 	
 	private ActivityResult execStartActivityInternal(final Context context, Intent intent, final int requestCode, ExecStartActivityCallback callback) {
-
-		if(intent!=null&&intent.getDataString().contains("recharge/home/home")){
-			Atlas.Downgrade_H5 = true;
-			Atlas.getInstance().checkDownGradeToH5(intent);
-			Atlas.Downgrade_H5 = false;
-		}
-
+		String componentName = null;
+		try {
 		// Get package name and component name
 		String packageName = null;
-		String componentName = null;
 		if (intent.getComponent() != null) {
 			packageName = intent.getComponent().getPackageName();
 			componentName = intent.getComponent().getClassName();
@@ -419,7 +413,7 @@ public class InstrumentationHook extends Instrumentation {
 		}
 
 		// Try to get class from system Classloader
-		try {
+
 			Class<?> clazz = null;
 			clazz = Framework.getSystemClassLoader().loadClass(componentName);
 			if (clazz != null) {
@@ -430,7 +424,7 @@ public class InstrumentationHook extends Instrumentation {
 		}
 		
 		return null;
-	}
+}
 
 	public static void fallBackToClassNotFoundCallback(Context context,
 			Intent intent, String componentName) {

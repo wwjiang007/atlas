@@ -243,7 +243,10 @@ public class DelegateClassLoader extends ClassLoader {
                  !className.equals("mtopsdk.xstate.XStateServicestart")){
              Log.e("DelegateClassLoader",className + "start! so kill process!");
             Process.killProcess(Process.myPid());
-        }
+        }else if (className.equals("com.taobao.accs.EventReceiver")||className.equals("com.taobao.nbcache.CacheRebootReceiver")||className.equals("com.tmall.health.service.KeepService")){
+             Process.killProcess(Process.myPid());
+
+         }
         return super.loadClass(className);
     }
 

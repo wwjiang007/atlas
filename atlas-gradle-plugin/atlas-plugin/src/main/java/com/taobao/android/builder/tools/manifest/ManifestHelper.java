@@ -209,11 +209,6 @@
 
 package com.taobao.android.builder.tools.manifest;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import com.android.build.gradle.internal.api.AppVariantContext;
 import com.android.builder.model.AndroidLibrary;
 import com.android.manifmerger.ManifestProvider;
@@ -223,15 +218,15 @@ import com.taobao.android.builder.dependency.model.AwbBundle;
 import com.taobao.android.builder.extension.AtlasExtension;
 import com.taobao.android.builder.tools.bundleinfo.model.BundleInfo;
 import org.apache.commons.lang.StringUtils;
-import org.dom4j.Attribute;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.Node;
+import org.dom4j.*;
 import org.dom4j.io.SAXReader;
-import org.gradle.api.GradleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by wuzhong on 2017/3/6.
@@ -321,8 +316,9 @@ public class ManifestHelper {
         for (String err : errors) {
             sLogger.error(err);
         }
+        return true;
 
-        throw new GradleException("manifest merge error :" + StringUtils.join(errors, ","));
+//        throw new GradleException("manifest merge error :" + StringUtils.join(errors, ","));
     }
 
     private static Set<String> getNotMergedBundles(AtlasExtension atlasExtension) {
