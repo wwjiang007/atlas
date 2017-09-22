@@ -357,9 +357,12 @@ public class InstrumentationHook extends Instrumentation {
 	
 	private ActivityResult execStartActivityInternal(final Context context, Intent intent, final int requestCode, ExecStartActivityCallback callback) {
 
-        if(intent!=null){
-            Atlas.getInstance().checkDownGradeToH5(intent);
-        }
+		if(intent!=null&&intent.getDataString().contains("recharge/home/home")){
+			Atlas.Downgrade_H5 = true;
+			Atlas.getInstance().checkDownGradeToH5(intent);
+			Atlas.Downgrade_H5 = false;
+		}
+
 		// Get package name and component name
 		String packageName = null;
 		String componentName = null;
