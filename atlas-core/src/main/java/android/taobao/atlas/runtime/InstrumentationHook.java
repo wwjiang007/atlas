@@ -557,7 +557,8 @@ public class InstrumentationHook extends Instrumentation {
 
         try {
 			if (shouldCreateTrafficPrompt && !className.equals("com.taobao.tao.welcome.Welcome")) {
-					throw new ClassNotFoundException();
+
+				throw new ClassNotFoundException();
 //		mApplicationFake.onFrameworkStartUp();
 			}
             activity = mBase.newActivity(cl, className, intent);

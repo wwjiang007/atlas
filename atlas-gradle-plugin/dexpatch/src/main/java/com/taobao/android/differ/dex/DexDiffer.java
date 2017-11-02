@@ -787,10 +787,12 @@ public class DexDiffer {
 
 
     public static void main(String[] args) throws IOException {
-        File dexFile = new File("/Users/shenghua/Downloads/taobao-android.apk/classes.dex");
-        DexBackedDexFile baseBackedDexFile = DexFileFactory.loadDexFile(dexFile, 19, true);
-        for (DexBackedClassDef classDef : baseBackedDexFile.getClasses()) {
-            System.out.println(classDef.getType());
+       DexDiffer dexDiffer = new DexDiffer(new File("/Users/lilong/Downloads/patch-6.12.0.55087@6.12.0/libcom_youku_android_player_container/classes.dex"),new File("/Users/lilong/Downloads/6.12.0.2-download/libcom_youku_android_player_container/classes.dex"),19);
+        try {
+            DexDiffInfo dexDiffInfo = dexDiffer.doDiff();dexDiffInfo.getClassDiffInfoMap().values().iterator().next().getModifyMethods().iterator().next().getBackedMethod().getName()
+            System.out.println(dexDiffInfo.getClassDiffInfoMap().size());
+        } catch (PatchException e) {
+            e.printStackTrace();
         }
 
     }
