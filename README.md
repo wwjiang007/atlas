@@ -1,9 +1,9 @@
 # Atlas
 
 [![license](http://img.shields.io/badge/license-Apache2.0-brightgreen.svg?style=flat)](https://github.com/alibaba/atlas/blob/master/LICENSE)
-[![Release Version](https://img.shields.io/badge/atlas_core-5.0.7.55-orange.svg)](https://github.com/alibaba/atlas/releases/tag/5.0.7.55) 
-[![Release Version](https://img.shields.io/badge/atlasupdate-1.1.4.14-blue.svg)](https://github.com/alibaba/atlas/releases/tag/5.0.7.55) 
-[![Release Version](https://img.shields.io/badge/atlasplugin-2.3.3.rc41-green.svg)](https://github.com/alibaba/atlas/releases/tag/5.0.7.55) 
+[![Release Version](https://img.shields.io/badge/atlas_core-5.1.0.0-orange.svg)](https://github.com/alibaba/atlas/releases/tag/v5.1.0.0) 
+[![Release Version](https://img.shields.io/badge/atlasupdate-1.1.4.21-blue.svg)](https://github.com/alibaba/atlas/releases/tag/v5.1.0.0) 
+[![Release Version](https://img.shields.io/badge/atlasplugin-2.3.3.rc63-green.svg)](https://github.com/alibaba/atlas/releases/tag/v5.1.0.0) 
 
 > A powerful Android Dynamic Component Framework.
 
@@ -35,7 +35,7 @@ You can see there were three main library in this project ([atlas-core](./atlas-
 ## Use Atlas
 
 * [Demo](./atlas-demo)
-* Doc: [English](https://alibaba.github.io/atlas/en/index.html), [中文](https://alibaba.github.io/atlas/index.html)
+* Doc: [English](), [中文](./atlas-docs)
 * DingTalk im group: Scan the follow QR code or Search group 11727755 using DingTalk(钉钉) app.
 ![dingtalk.png](assets/dingtalk.png) 
 

@@ -228,6 +228,18 @@ public class TBuildType {
 
     private PatchConfig patchConfig;
 
+    private DefaultChannelConfig atlasChannelConfig;
+
+    public EnhanceConfig getEnhanceConfig() {
+        return enhanceConfig;
+    }
+
+    public void setEnhanceConfig(EnhanceConfig enhanceConfig) {
+        this.enhanceConfig = enhanceConfig;
+    }
+
+    private EnhanceConfig enhanceConfig;
+
     public DexConfig getDexConfig() {
         return dexConfig;
     }
@@ -292,5 +304,13 @@ public class TBuildType {
 
     public void setMultiDexConfig(MultiDexConfig multiDexConfig) {
         this.multiDexConfig = multiDexConfig;
+    }
+
+    public DefaultChannelConfig getAtlasChannelConfig() {
+        return atlasChannelConfig;
+    }
+
+    public void setAtlasChannelConfig(DefaultChannelConfig channelConfig) {
+        this.atlasChannelConfig = channelConfig;
     }
 }
